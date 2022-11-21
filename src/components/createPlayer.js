@@ -53,7 +53,7 @@ const CreatePlayer = () => {
         , {withCredentials: true}
         )
             .then(res => history.push('/'))
-            .catch(err => console.log(err)); //setErrorRegistro(err.response.data.errors)
+            .catch(err => setErrorRegistro(err.response.data.errors)); //setErrorRegistro(err.response.data.errors)
     }
 
     const login = e => {
@@ -112,10 +112,10 @@ const CreatePlayer = () => {
                         {Gender.map(elemento =>
                             <>
                             <div className="mx-4">
-                                <input  id="Avatar" type="radio" name="Avatar" key={elemento} value={elemento} onChange={e=>setAvatar(e.target.value)} />
-                                <label className="" for="Avatar">
+                                <input  id="Avatar" type="radio" name="Avatar"  value={elemento} onChange={e=>setAvatar(e.target.value)} />
+                                <label className="" htmlFor="Avatar" >
                                     <img src= {male} className="img-responsive" alt="avatar" width="80px" />
-                                    {/* {`./img/${elemento}.png`} */}
+                                    {/* {`./img/${elemento}.png`}    key={elemento} */}
                                 </label>
                             </div>
                             </>

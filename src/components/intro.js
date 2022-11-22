@@ -7,29 +7,42 @@ import {Link, useHistory} from "react-router-dom";
 const Intro = () => {
 
 
+    const history = useHistory();
+
+
+    const GoPlayer = () => {
+
+            history.push('/player')
+        
+
+    }
+
+    const GoMaster = () => {
+
+        history.push('/admi')
+    
+
+}
+
+
     return (
-        <div className="masterbck">
+        <div className="masterbck container">
             <h1 className="text-center my-4">Elije tu destino</h1>
             <div className="row my-5 "> 
-            <div>
-                <h2>Maestro</h2>
-                <a href="/admi"> <img src={master} className="img-fluid col-6 "  width="200px"  alt="master"></img> </a>
+                <div className="col-6">
+                    <h2>Maestro</h2>
+                    <img src={master} className="img-fluid col-6 "  width="100px"  alt="master"   onClick={GoMaster}/> 
+                </div>
+
+                <div className="col-6">
+                    <h2>Aprendiz</h2>
+                        <img src={player} className="img-fluid col-6 "  width="100px"  alt="player"   onClick={GoPlayer}/> 
+                </div>
+
+                
+
             </div>
 
-            <div>
-                <h2>Aprendiz</h2>
-                <a href="/player"> <img src={player} className="img-fluid col-6 "  width="200px"  alt="player"/> </a>
-            </div>
-
-            
-            {/* <Link to="/admi" className="col-6 text-center">Maestro </Link>
-            <Link to="/player" className="col-6 text-center">Aprendiz </Link> */}
-            </div>
-
-
-            {/* <img src="https://i.pinimg.com/236x/99/52/71/995271f543426293fb4f2b4f0ee2f5a0--kawaii-chibi-anime-chibi.jpg">
-                <Link to="/Admi" className="">Maestro </Link></img>
-     */}
 
         </div>
 

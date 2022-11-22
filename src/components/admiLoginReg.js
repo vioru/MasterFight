@@ -53,7 +53,7 @@ const LoginRegister = () => {
             password,
             confirmPassword
         }, {withCredentials: true})
-            .then(res => history.push('/'))
+            .then(res => history.push('/admi/wall'))
             .catch(err => console.log(err)); //setErrorRegistro(err.response.data.errors)
     }
 
@@ -68,7 +68,7 @@ const LoginRegister = () => {
                 if(res.data.error) {
                     setErrorLogin(res.data.message);
                 } else {
-                    history.push('/');
+                    history.push('/admi/wall');
                 }
             })
             .catch(err => console.log(err));

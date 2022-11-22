@@ -14,7 +14,7 @@ const CreatePlayer = () => {
     const [Email, setEmail] = useState("");
     const [Avatar, setAvatar] = useState("");
     const [Password, setPassword] = useState("");
-    const [ConfirmPassword, setConfirmPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
 
     const Gender = ["male","female","they"];
 
@@ -38,7 +38,7 @@ const CreatePlayer = () => {
             Email,
             Avatar,
             Password,
-            ConfirmPassword
+            confirmPassword
         }
         console.log(data);
 
@@ -48,11 +48,11 @@ const CreatePlayer = () => {
             Email,
             Avatar,
             Password,
-            ConfirmPassword
+            confirmPassword
         }
         , {withCredentials: true}
         )
-            .then(res => history.push('/'))
+            .then(res => history.push('/player/wall'))
             .catch(err => setErrorRegistro(err.response.data.errors)); //setErrorRegistro(err.response.data.errors)
     }
 
@@ -60,14 +60,14 @@ const CreatePlayer = () => {
         e.preventDefault();
 
         axios.post('http://localhost:8000/api/loginPlayer', {
-            email: emailLogin,
-            password: passwordLogin
+            Email: emailLogin,
+            Password: passwordLogin
         }, {withCredentials: true})
             .then(res => {
                 if(res.data.error) {
                     setErrorLogin(res.data.message);
                 } else {
-                    history.push('/');
+                    history.push('/player/wall');
                 }
             })
             .catch(err => console.log(err));
@@ -104,22 +104,34 @@ const CreatePlayer = () => {
                             {errorRegistro.Password ? <span className="text-danger">{errorRegistro.Password.message}</span> : null}
                         </div>
                         <div className="form-group">
-                            <label htmlFor="ConfirmPassword">Confirmación</label>
-                            <input type="password" name="ConfirmPassword" id="ConfirmPassword" className="form-control" value={ConfirmPassword} onChange={e=> setConfirmPassword(e.target.value)}  />
-                            {errorRegistro.ConfirmPassword ? <span className="text-danger">{errorRegistro.ConfirmPassword.message}</span> : null}
+                            <label htmlFor="confirmPassword">Confirmación</label>
+                            <input type="password" name="confirmPassword" id="confirmPassword" className="form-control" value={confirmPassword} onChange={e=> setConfirmPassword(e.target.value)}  />
+                            {errorRegistro.confirmPassword ? <span className="text-danger">{errorRegistro.confirmPassword.message}</span> : null}
                         </div>
                         <div className='col-md-6 d-flex '>
-                        {Gender.map(elemento =>
+                        {Gender.map(elemento =>(
                             <>
                             <div className="mx-4">
                                 <input  id="Avatar" type="radio" name="Avatar"  value={elemento} onChange={e=>setAvatar(e.target.value)} />
                                 <label className="" htmlFor="Avatar" >
-                                    <img src= {male} className="img-responsive" alt="avatar" width="80px" />
-                                    {/* {`./img/${elemento}.png`}    key={elemento} */}
+                                {/* {elemento == "male" ? <img src= {male} className="img-responsive" alt="avatar" width="80px" />   : <img src= {female} className="img-responsive" alt="avatar" width="80px" />} */}
+                                    <img src= {elemento=="male" ? male: elemento =="female" ? female : they} className="img-responsive" alt="avatar" width="80px" /> 
+
+
+                                    {/* if(elemento === "male"){
+                                        <img src= {male} className="img-responsive" alt="avatar" width="80px" />
+                                    }else(elemento === "female"){
+                                        <img src= {female} className="img-responsive" alt="avatar" width="80px" />
+                                    }else(elemento === "they"){
+                                        <img src= {they} className="img-responsive" alt="avatar" width="80px" />
+                                    } */}
+                                
+                                    
+                                    {/* {`./img/${elemento}.png`}    key={elemento}     elemento == "male" ? <img src= {male} className="img-responsive" alt="avatar" width="80px" />   :*/}
                                 </label>
                             </div>
                             </>
-                            )}
+                            ))}
                         </div>
 
                         <input type="submit" value="Registarme" className="btn btn-primary" />
@@ -129,7 +141,7 @@ const CreatePlayer = () => {
                     <h2>Iniciar Sesión</h2>
                     <form onSubmit={login} className="my-3">
                         <div className="form-group">
-                            <label htmlFor="emailLogin">Usuario</label>
+                            <label htmlFor="emailLogin">Email</label>
                             <input type="email" name="emailLogin" id="emailLogin" className="form-control" value={emailLogin} onChange={e=>setEmailLogin(e.target.value)} />
                         </div>
                         <div className="form-group">

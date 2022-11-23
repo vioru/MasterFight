@@ -8,6 +8,7 @@ const AllQuiz = () => {
 
     const [quiz, setQuiz] = useState([]);
     const [user, setUser] = useState({});
+    
     // console.log(autores);
     
 
@@ -89,7 +90,7 @@ const AllQuiz = () => {
 
                 <div className="col-6">
                     <h1>Tus Examenes</h1>
-                    <CreateQuestions>  </CreateQuestions>
+
                 </div>
             
             

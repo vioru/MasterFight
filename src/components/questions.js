@@ -7,10 +7,17 @@ import {useHistory} from "react-router-dom";
 const CreateQuestions = () => {
 
     //Para Formulario Quiz
+    
+    const [Question, setQuestion] = useState("");
 
-    const [Question, setQuestion] = useState([""]);
-    const [Options, setOptions] = useState(["","","",""]);
-    const [Status, setStatus] = useState([""]);
+    const [Options0, setOptions0] = useState("");
+    const [Options1, setOptions1] = useState("");
+    const [Options2, setOptions2] = useState("");
+    const [Options3, setOptions3] = useState("");
+    const [options, setOptions] = useState(["","","",""]);
+    const [status, setStatus] = useState(false);
+    const Answers = ["","","",""];
+    // let opciones =[Options0,Options1,Options2,Options3];
     let a = 0;
 
 
@@ -22,9 +29,16 @@ const CreateQuestions = () => {
     const newPlayer = e => {
         e.preventDefault();
 
+
+        // console.log(opciones);
+
+        // setOptions=(opciones);
+
+        
+
         let data ={
-            Options,
-            Status
+            options,
+            status
         }
         console.log(data);
 
@@ -67,19 +81,43 @@ const CreateQuestions = () => {
 </div>
 <p>Opciones</p>
 <div className=" form-group mx-1 row text-center">
-    {/* {`./img/${elemento}.png`}    key={elemento}  onChange={e=>setAvatar(e.target.value)}*/}
+        {/* {Answers.map(elemento =>(<>
+                    <input type="text" name="Options" id="Options" className="form-control col-11 my-2 " value={options} onChange={e=> setOptions(e.target.value)}  />
+                    <input  className="form-control col-1  my-3" id="status" type="radio" name="status"  value=""  onChange={e=> setStatus(e.target.value)} /> 
+                    </>       
+        )
 
-    <input type="text" name="Options" id="Options" className="form-control col-11 my-2 " value={Options[0]} onChange={e=> setOptions(e.target.value,0)}  />
+        )
+        } */}
+{/* 
+    <input type="text" name="Options" id="Options" className="form-control col-11 my-2 " value={Options0} onChange={e=> setOptions0(e.target.value)}  />
     <input  className="form-control col-1  my-3" id="status" type="radio" name="status"  value=""  onChange={e=> setStatus(e.target.value)} /> 
     
 
-    <input type="text" name="Options" id="Options" className="form-control col-11 my-2 " value={Options[1]} onChange={e=> setOptions(e.target.value,1)}  />
+    <input type="text" name="Options" id="Options" className="form-control col-11 my-2 " value={Options1} onChange={e=> setOptions1(e.target.value,1)}  />
     <input  className="form-control col-1  my-3" id="status" type="radio" name="status"  value=""  />
 
-    <input type="text" name="Options" id="Options" className="form-control col-11 my-2 " value={Options[2]} onChange={e=> setOptions(e.target.value,2)}  />
+    <input type="text" name="Options" id="Options" className="form-control col-11 my-2 " value={Options2} onChange={e=> setOptions2(e.target.value,2)}  />
     <input  className="form-control col-1  my-3" id="status" type="radio" name="status"  value=""  />
 
-    <input type="text" name="Options" id="Options" className="form-control col-11 my-2 " value={Options[3]} onChange={e=> setOptions(e.target.value,3)}  />
+    <input type="text" name="Options" id="Options" className="form-control col-11 my-2 " value={Options3} onChange={e=> setOptions3(e.target.value,3)}  />
+    <input  className="form-control col-1  my-3" id="status" type="radio" name="status"  value=""  />
+     */}
+
+
+
+
+    <input type="text" name="Options" id="Options" className="form-control col-11 my-2 " value={options[0]} onChange={e=> setOptions[0](e.target.value)}  />
+    <input  className="form-control col-1  my-3" id="status" type="radio" name="status"  value=""  onChange={e=> setStatus(e.target.value)} /> 
+    
+
+    <input type="text" name="Options" id="Options" className="form-control col-11 my-2 " value={options[1]} onChange={e=> setOptions[1](e.target.value,1)}  />
+    <input  className="form-control col-1  my-3" id="status" type="radio" name="status"  value=""  />
+
+    <input type="text" name="Options" id="Options" className="form-control col-11 my-2 " value={options[2]} onChange={e=> setOptions[2](e.target.value,2)}  />
+    <input  className="form-control col-1  my-3" id="status" type="radio" name="status"  value=""  />
+
+    <input type="text" name="Options" id="Options" className="form-control col-11 my-2 " value={options[3]} onChange={e=> setOptions[3](e.target.value,3)}  />
     <input  className="form-control col-1  my-3" id="status" type="radio" name="status"  value=""  />
     
 </div>
@@ -101,6 +139,19 @@ const CreateQuestions = () => {
                     <input type="submit" value="Guardar" className="btn btn-primary" />
                 </form>
             </div>
+            
+                    {/* <div className=" form-group mx-1 row text-center">
+                        <input type="text" name="Options" id="Options" className="form-control col-11 my-2 " value={Options0} onChange={e => setOptions0(e.target.value)} />
+                        <input className="form-control col-1  my-3" id="status" type="radio" name="status" value="" onChange={e => setStatus(e.target.value)} />
+
+
+                        <input type="text" name="Options" id="Options" className="form-control col-11 my-2 " value={Options1} onChange={e => setOptions1(e.target.value, 1)} />
+                        <input className="form-control col-1  my-3" id="status" type="radio" name="status" value="" />
+
+                        <input type="text" name="Options" id="Options" className="form-control col-11 my-2 " value={Options2} onChange={e => setOptions2(e.target.value, 2)} />
+                        <input className="form-control col-1  my-3" id="status" type="radio" name="status" value="" />
+
+                    </div> */}
 
         </div>
     )

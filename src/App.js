@@ -6,6 +6,7 @@ import CreatePlayer from './components/createPlayer';
 import CreateQuiz from './components/createQuiz';
 import AllQuiz from './components/allQuiz';
 import PlayerWall from './components/playerWall';
+import TheQuiz from './components/theQuiz';
 
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
         <Route path="/player" exact render={() => <CreatePlayer />} />
         <Route path="/admi/wall" exact render={() => <AllQuiz />} />
         <Route path="/player/wall" exact render={() => <PlayerWall />} />
+        <Route path="/thequiz/:id" exact render={() => <TheQuiz />} />
 
         
         {/* <Route path="/login" render={()=> <LoginRegistro/> } />

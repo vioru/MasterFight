@@ -8,8 +8,8 @@ const AllQuiz = () => {
 
     const [quiz, setQuiz] = useState([]);
     const [user, setUser] = useState({});
-    
-    // console.log(autores);
+
+    console.log('soy el quiz '+quiz);
     
 
     const history = useHistory()
@@ -17,7 +17,11 @@ const AllQuiz = () => {
 
     useEffect(() => {
         axios.get("http://localhost:8000/api/allQuiz", {withCredentials: true})
-            .then(res => setQuiz(res.data))
+            .then(res => {
+            setQuiz(res.data);
+            console.log("la data", res.data);
+            console.log("quiz", quiz);
+        })
             .catch(err => {
                 if(err.response.status === 401) {
                     history.push('/login');
@@ -35,6 +39,12 @@ const AllQuiz = () => {
         });
 
     }
+
+        const AgreeQuestion = (id) => {
+
+            history.push('/thequiz/'+id);
+    }
+
 
     // useEffect(() => {
     //     axios.get("http://localhost:8000/api/autors", {withCredentials: true})
@@ -90,7 +100,16 @@ const AllQuiz = () => {
 
                 <div className="col-6">
                     <h1>Tus Examenes</h1>
+                    {
+                    quiz.map((element, index) => (<>
+                        <p key ={index} id={"pquiz"+index}> {element.name}</p>
 
+                        <button className="btn btn-danger" onClick={()=>AgreeQuestion(element._id)} >ver</button>
+                        </>
+                    ))
+                    }
+{/*                     
+                    <CreateQuestions>  </CreateQuestions> */}
                 </div>
             
             

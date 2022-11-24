@@ -4,53 +4,115 @@ import axios from "axios";
 import {useHistory} from "react-router-dom";
 
 
-const CreateQuestions = () => {
+const CreateQuestions = ({id}) => {
 
-    //Para Formulario Quiz
-    
-    const [Question, setQuestion] = useState("");
 
-    const [Options0, setOptions0] = useState("");
-    const [Options1, setOptions1] = useState("");
-    const [Options2, setOptions2] = useState("");
-    const [Options3, setOptions3] = useState("");
-    const [options, setOptions] = useState(["","","",""]);
-    const [status, setStatus] = useState(false);
-    const Answers = ["","","",""];
-    // let opciones =[Options0,Options1,Options2,Options3];
+    const [question, setQuestion] = useState("");
+    const [options,setOptions] =useState("");
+    const [status,setStatus] =useState([false,false,false]);
     let a = 0;
 
 
 
-    const [errorRegistro, setErrorRegistro] = useState({});
+
+    const [errorQuestion, setErrorQuestion] = useState({});
 
     const history = useHistory();
 
-    const newPlayer = e => {
-        e.preventDefault();
+    const OptionsChange = ({ target }) => {
+        setOptions({
+            ...options,
+            [target.id]: target.value
+        });
+    }
+
+    const StatusChange = ({ target }) => {
+    
+        // let prueba = true 
+        // if(target.id == "status1" ){
+    
+        //     setStatus([true,false,false]);
+        // }else if(target.id == "status2" ){
+    
+        //     setStatus([false,true,false]);
+        // }else if(target.id == "status3" ){
+
+        //     setStatus([false,false,false]);
+        // }
 
 
-        // console.log(opciones);
 
-        // setOptions=(opciones);
+        // let status1 = false;
+        // let status2=false;
+        // let status3=false;
+        // if(target.id == "status1" ){
+        //     status1=true;
+        // }else if(target.id == "status2" ){
+        //     status2=true;
+        // }else if(target.id == "status3" ){
+        //     status3=true;
+        // }
+        // setStatus([status1,status2,status3]);
 
+        setStatus([target.id == "status1",target.id == "status2",target.id == "status3"]);
         
+        // let prueba = true 
+        // if(target.id == "status1" ){
+        //     setStatus[0](prueba);
+        // }else if(target.id == "status2" ){
+        //     setStatus[1](prueba);
+        // }else if(target.id == "status3" ){
+        //     setStatus[2](prueba);
+        // }
+
+
+        // setStatus();
+        // setStatus({
+        
+        //     ...status,
+        //     [target.id]: target.value =='on'?true:false
+        // });
+        // console.log(status, 'los values');
+    }
+
+
+    const newQuestion = e => {
+        e.preventDefault();
+        // console.log(status,'status');
 
         let data ={
-            options,
-            status
+            question,
+            option1:options.option1,
+            option2:options.option2,
+            option3:options.option3,
+            status1:status[0],
+            status2:status[1],
+            status3:status[2],
+            quiz:id
         }
-        console.log(data);
+        // console.log(data);
 
         
-        // axios.post('http://localhost:8000/api/registerP',{
-        //     name,
-        //     type,
-        //     scoreToWin,
-        //     questions
-        // }, {withCredentials: true})
-        //     .then(res => history.push('/'))
-        //     .catch(err => console.log(err)); //setErrorRegistro(err.response.data.errors)
+        axios.post('http://localhost:8000/api/question/save',{
+            question,
+            option1:options.option1,
+            option2:options.option2,
+            option3:options.option3,
+            status1:status[0],
+            status2:status[1],
+            status3:status[2],
+            quiz:id
+        }, {withCredentials: true})
+            .then(res => {
+            let idQuestion = res.data._id;
+
+            axios.put('http://localhost:8000/api/quiz/update/'+id,{
+                questions : idQuestion
+        }, {withCredentials: true})
+
+            history.push('/thequiz/'+id)
+            })
+            .catch(err => setErrorQuestion(err.response.data.errors)); //setErrorQuestion(err.response.data.errors)
     }
 
     // const agreeQuestion = () => {
@@ -72,55 +134,32 @@ const CreateQuestions = () => {
         <div className="row container mx-5 masterbck">
             <div className="col-10 my-3 ">
                 <h2 className="">Preguntas</h2>
-                <form onSubmit={newPlayer} className="my-3" >
+                <form onSubmit={newQuestion} className="my-3" >
                 <div id="question">
 <div className="form-group">
     <label htmlFor="Question">Haz tu Pregunta</label>
-    <input Question="text" name="Question" id="Question" className="form-control" value={Question} onChange={e=> setQuestion(e.target.value)}  />
-        {errorRegistro.Question ? <span className="text-danger">{errorRegistro.Question.message}</span> : null} 
+    {/* <input type="hidden" value={id} name="id"/> */}
+    
+    <input type="text" name="Question" id="Question" className="form-control" value={question} onChange={e=> setQuestion(e.target.value)}  />
+        {errorQuestion.Question ? <span className="text-danger">{errorQuestion.Question.message}</span> : null} 
 </div>
 <p>Opciones</p>
 <div className=" form-group mx-1 row text-center">
-        {/* {Answers.map(elemento =>(<>
-                    <input type="text" name="Options" id="Options" className="form-control col-11 my-2 " value={options} onChange={e=> setOptions(e.target.value)}  />
-                    <input  className="form-control col-1  my-3" id="status" type="radio" name="status"  value=""  onChange={e=> setStatus(e.target.value)} /> 
-                    </>       
-        )
 
-        )
-        } */}
-{/* 
-    <input type="text" name="Options" id="Options" className="form-control col-11 my-2 " value={Options0} onChange={e=> setOptions0(e.target.value)}  />
-    <input  className="form-control col-1  my-3" id="status" type="radio" name="status"  value=""  onChange={e=> setStatus(e.target.value)} /> 
+
+    <input type="text" name="option1" id="option1" className="form-control col-11 my-2 "  onChange={OptionsChange}  />
+    <input  className="form-control col-1  my-3" id="status1" type="radio" name="status"    onChange={StatusChange} /> 
     
 
-    <input type="text" name="Options" id="Options" className="form-control col-11 my-2 " value={Options1} onChange={e=> setOptions1(e.target.value,1)}  />
-    <input  className="form-control col-1  my-3" id="status" type="radio" name="status"  value=""  />
+    <input type="text" name="option2" id="option2" className="form-control col-11 my-2 " onChange={OptionsChange}  />
+    <input  className="form-control col-1  my-3" id="status2" type="radio" name="status"  onChange={StatusChange} />
 
-    <input type="text" name="Options" id="Options" className="form-control col-11 my-2 " value={Options2} onChange={e=> setOptions2(e.target.value,2)}  />
-    <input  className="form-control col-1  my-3" id="status" type="radio" name="status"  value=""  />
+    <input type="text" name="option3" id="option3" className="form-control col-11 my-2 " onChange={OptionsChange}  />
+    <input  className="form-control col-1  my-3" id="status3" type="radio" name="status"  onChange={StatusChange}  />
 
-    <input type="text" name="Options" id="Options" className="form-control col-11 my-2 " value={Options3} onChange={e=> setOptions3(e.target.value,3)}  />
-    <input  className="form-control col-1  my-3" id="status" type="radio" name="status"  value=""  />
-     */}
-
-
-
-
-    <input type="text" name="Options" id="Options" className="form-control col-11 my-2 " value={options[0]} onChange={e=> setOptions[0](e.target.value)}  />
-    <input  className="form-control col-1  my-3" id="status" type="radio" name="status"  value=""  onChange={e=> setStatus(e.target.value)} /> 
-    
-
-    <input type="text" name="Options" id="Options" className="form-control col-11 my-2 " value={options[1]} onChange={e=> setOptions[1](e.target.value,1)}  />
-    <input  className="form-control col-1  my-3" id="status" type="radio" name="status"  value=""  />
-
-    <input type="text" name="Options" id="Options" className="form-control col-11 my-2 " value={options[2]} onChange={e=> setOptions[2](e.target.value,2)}  />
-    <input  className="form-control col-1  my-3" id="status" type="radio" name="status"  value=""  />
-
-    <input type="text" name="Options" id="Options" className="form-control col-11 my-2 " value={options[3]} onChange={e=> setOptions[3](e.target.value,3)}  />
-    <input  className="form-control col-1  my-3" id="status" type="radio" name="status"  value=""  />
     
 </div>
+{status === [false,false, false] ? <span className="text-danger">debes escoger la respuesta correcta</span> : null}
 
 <div id="morequestions">
 
@@ -152,6 +191,50 @@ const CreateQuestions = () => {
                         <input className="form-control col-1  my-3" id="status" type="radio" name="status" value="" />
 
                     </div> */}
+
+{/*                <div className="form-group">
+                        <label htmlFor="Question">Haz tu Pregunta</label>
+                        <input Question="text" name="Question" id="Question" className="form-control" value={Question} onChange={e => setQuestion(e.target.value)} />
+                        {errorQuiz.Question ? <span className="text-danger">{errorQuiz.Question.message}</span> : null}
+                        <p>Opciones</p>
+                        <div className=" form-group mx-1 row text-center">
+                            <input type="text" name="Options" id="Option0" className="form-control col-11 my-2 " onChange={handleChange} />
+                            <input className="form-control col-1  my-3" id="status" type="radio" name="status" value="" onChange={e => setStatus(e.target.value)} />
+
+
+                            <input type="text" name="Options" id="Option1" className="form-control col-11 my-2 " onChange={handleChange} />
+                            <input className="form-control col-1  my-3" id="status" type="radio" name="status" value="" />
+
+                            {/* <input type="text" name="Options" id="Option2" className="form-control col-11 my-2 " value={Options2} onChange={e => setOptions2(e.target.value, 2)} /> 
+                            <input className="form-control col-1  my-3" id="status" type="radio" name="status" value="" />
+
+                        </div>
+
+                    </div> */}
+
+                            {/* {Answers.map(elemento =>(<>
+                    <input type="text" name="Options" id="Options" className="form-control col-11 my-2 " value={options} onChange={e=> setOptions(e.target.value)}  />
+                    <input  className="form-control col-1  my-3" id="status" type="radio" name="status"  value=""  onChange={e=> setStatus(e.target.value)} /> 
+                    </>       
+        )
+
+        )
+        } */}
+{/* 
+    <input type="text" name="Options" id="Options" className="form-control col-11 my-2 " value={Options0} onChange={e=> setOptions0(e.target.value)}  />
+    <input  className="form-control col-1  my-3" id="status" type="radio" name="status"  value=""  onChange={e=> setStatus(e.target.value)} /> 
+    
+
+    <input type="text" name="Options" id="Options" className="form-control col-11 my-2 " value={Options1} onChange={e=> setOptions1(e.target.value,1)}  />
+    <input  className="form-control col-1  my-3" id="status" type="radio" name="status"  value=""  />
+
+    <input type="text" name="Options" id="Options" className="form-control col-11 my-2 " value={Options2} onChange={e=> setOptions2(e.target.value,2)}  />
+    <input  className="form-control col-1  my-3" id="status" type="radio" name="status"  value=""  />
+
+    <input type="text" name="Options" id="Options" className="form-control col-11 my-2 " value={Options3} onChange={e=> setOptions3(e.target.value,3)}  />
+    <input  className="form-control col-1  my-3" id="status" type="radio" name="status"  value=""  />
+     */}
+
 
         </div>
     )

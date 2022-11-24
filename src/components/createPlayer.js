@@ -112,7 +112,7 @@ const CreatePlayer = () => {
                         {Gender.map(elemento =>(
                             <>
                             <div className="mx-4">
-                                <input  id="Avatar" type="radio" name="Avatar"  value={elemento} onChange={e=>setAvatar(e.target.value)} />
+                                <input  id={"Avatar"+elemento} type="radio" name="Avatar"  value={elemento} onChange={e=>setAvatar(e.target.value)} />
                                 <label className="" htmlFor="Avatar" >
                                 {/* {elemento == "male" ? <img src= {male} className="img-responsive" alt="avatar" width="80px" />   : <img src= {female} className="img-responsive" alt="avatar" width="80px" />} */}
                                     <img src= {elemento=="male" ? male: elemento =="female" ? female : they} className="img-responsive" alt="avatar" width="80px" /> 

@@ -12,12 +12,24 @@ const CreateQuiz = () => {
     const [type, setType] = useState("");
     const [scoreToWin, setScoreToWin] = useState("");
     const [Question, setQuestion] = useState([""]);
-    const [Options0, setOptions0] = useState("");
-    const [Options1, setOptions1] = useState("");
-    const [Options2, setOptions2] = useState("");
-    const [status, setStatus] = useState(false);
-    let a = 0;
 
+    const [inputValues, setInputValues] = useState({})
+    // const [Options0, setOptions0] = useState("");
+    // const [Options1, setOptions1] = useState("");
+    // const [Options2, setOptions2] = useState("");
+    const [status, setStatus] = useState(false);
+    let numberQuestion = 0;
+    let numberOption = 0;
+
+
+
+    const handleChange = ({ target }) => {
+        setInputValues({
+            ...inputValues,
+            [target.id]: target.value
+        });
+        console.log(inputValues, 'los values');
+    }
 
 
     const [errorQuiz, setErrorQuiz] = useState({});
@@ -46,40 +58,22 @@ const CreateQuiz = () => {
     }
 
 
-        const agreeQuestion = () => {
+    const agreeQuestion = () => {
 
-            a++;
-            var div = document.createElement('div');
-            div.setAttribute('classNAme', 'form-inline');
-            <div className="form-group">
-                        <label htmlFor="Question">Haz tu Pregunta</label>
-                        <input Question="text" name="Question" id="Question" className="form-control" value={Question} onChange={e => setQuestion(e.target.value)} />
-                        {errorQuiz.Question ? <span className="text-danger">{errorQuiz.Question.message}</span> : null}
-                        <p>Opciones</p>
-                        <div className=" form-group mx-1 row text-center">
-                                <input type="text" name="Options" id="Option0" className="form-control col-11 my-2 " value={Options0} onChange={e => setOptions0(e.target.value)} />
-                                <input className="form-control col-1  my-3" id="status" type="radio" name="status" value="" onChange={e => setStatus(e.target.value)} />
-
-
-                                <input type="text" name="Options" id="Option1" className="form-control col-11 my-2 " value={Options1} onChange={e => setOptions1(e.target.value, 1)} />
-                                <input className="form-control col-1  my-3" id="status" type="radio" name="status" value="" />
-
-                                <input type="text" name="Options" id="Option2" className="form-control col-11 my-2 " value={Options2} onChange={e => setOptions2(e.target.value, 2)} />
-                                <input className="form-control col-1  my-3" id="status" type="radio" name="status" value="" />
-
-                        </div> 
-
-                    </div>
+        numberQuestion++;
+        var div = document.createElement('div');
+        div.setAttribute('classNAme', 'form-inline');
 
 
 
-                div.innerHTML = `
-                <label htmlFor="Question'${a}'">Haz tu Pregunta</label>
-                <input Question="text" name="Question" id="Question'${a}'" className="form-control" 
+
+        div.innerHTML = `
+                <label htmlFor="Question'${numberQuestion}'">Haz tu Pregunta</label>
+                <input Question="text" name="Question" id="Question'${numberQuestion}'" className="form-control" 
                 value="'${Question}'" onChange={e => setQuestion(e.target.value)} />`;
-                // '<div style="clear:both" class="cancion_'+a+' col-md-offset-1 col-md-6"><input class="form-control" name="cancion_'+a+'" type="text"/></div><div class="cancion_'+a+' col-md-2""><input class="form-control" name="duracion_'+a+'" type="text"/></div>'
-                document.getElementById('morequestions').appendChild(div);document.getElementById('morequestions').appendChild(div);
-    
+        // '<div style="clear:both" class="cancion_'+a+' col-md-offset-1 col-md-6"><input class="form-control" name="cancion_'+a+'" type="text"/></div><div class="cancion_'+a+' col-md-2""><input class="form-control" name="duracion_'+a+'" type="text"/></div>'
+        document.getElementById('morequestions').appendChild(div); document.getElementById('morequestions').appendChild(div);
+
 
     }
 
@@ -106,39 +100,21 @@ const CreateQuiz = () => {
                         <input type="number" name="scoreToWin" id="scoreToWin" className="form-control" value={scoreToWin} onChange={e => setScoreToWin(e.target.value)} />
                         {errorQuiz.scoreToWin ? <span className="text-danger">{errorQuiz.scoreToWin.message}</span> : null}
                     </div>
-                    
-                    <div className="form-group">
-                        <label htmlFor="Question">Haz tu Pregunta</label>
-                        <input Question="text" name="Question" id="Question" className="form-control" value={Question} onChange={e => setQuestion(e.target.value)} />
-                        {errorQuiz.Question ? <span className="text-danger">{errorQuiz.Question.message}</span> : null}
-                        <p>Opciones</p>
-                        <div className=" form-group mx-1 row text-center">
-                                <input type="text" name="Options" id="Option0" className="form-control col-11 my-2 " value={Options0} onChange={e => setOptions0(e.target.value)} />
-                                <input className="form-control col-1  my-3" id="status" type="radio" name="status" value="" onChange={e => setStatus(e.target.value)} />
 
 
-                                <input type="text" name="Options" id="Option1" className="form-control col-11 my-2 " value={Options1} onChange={e => setOptions1(e.target.value, 1)} />
-                                <input className="form-control col-1  my-3" id="status" type="radio" name="status" value="" />
+{/* 
+                                <div id="morequestions">
 
-                                <input type="text" name="Options" id="Option2" className="form-control col-11 my-2 " value={Options2} onChange={e => setOptions2(e.target.value, 2)} />
-                                <input className="form-control col-1  my-3" id="status" type="radio" name="status" value="" />
-
-                        </div> 
-
-                    </div>
-
-                    <div id="morequestions">
-
-                    </div>
+                                </div> */}
 
 
-                    <div className="row my-5">
-                        <button className="col-1 btn btn-success" onClick={agreeQuestion}>+</button>
-                        <p className="col-5">Agregar mas preguntas</p>
+                                {/* <div className="row my-5">
+                                    <button className="col-1 btn btn-success" onClick={agreeQuestion}>+</button>
+                                    <p className="col-5">Agregar mas preguntas</p>
 
 
 
-</div> 
+                                </div> */}
 
                     <input type="submit" value="Guardar" className="btn btn-primary" />
                 </form>

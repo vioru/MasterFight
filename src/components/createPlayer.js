@@ -78,7 +78,12 @@ const CreatePlayer = () => {
 
     return (
         <div className="container mx-5 ">
-            <Link to="/" className="  btn btn-success  my-5 "> Atras </Link>
+
+            <div className="row">
+                <h1 className="col-11">Ingreso Aprendices</h1>
+                <Link to="/" className="  btn btn-success col-1 my-2 "> Atras </Link>
+            </div>
+
             <div className="row">
                 <div className="col-6 my-3 ">
                     <h2 className="">Registro</h2>
@@ -114,20 +119,9 @@ const CreatePlayer = () => {
                             <div className="mx-4">
                                 <input  id={"Avatar"+elemento} type="radio" name="Avatar"  value={elemento} onChange={e=>setAvatar(e.target.value)} />
                                 <label className="" htmlFor="Avatar" >
-                                {/* {elemento == "male" ? <img src= {male} className="img-responsive" alt="avatar" width="80px" />   : <img src= {female} className="img-responsive" alt="avatar" width="80px" />} */}
-                                    <img src= {elemento=="male" ? male: elemento =="female" ? female : they} className="img-responsive" alt="avatar" width="80px" /> 
+                                    <img src= {elemento=="male" ? male: elemento =="female" ? female : they} 
+                                    className="img-responsive" alt="avatar" width="80px" /> 
 
-
-                                    {/* if(elemento === "male"){
-                                        <img src= {male} className="img-responsive" alt="avatar" width="80px" />
-                                    }else(elemento === "female"){
-                                        <img src= {female} className="img-responsive" alt="avatar" width="80px" />
-                                    }else(elemento === "they"){
-                                        <img src= {they} className="img-responsive" alt="avatar" width="80px" />
-                                    } */}
-                                
-                                    
-                                    {/* {`./img/${elemento}.png`}    key={elemento}     elemento == "male" ? <img src= {male} className="img-responsive" alt="avatar" width="80px" />   :*/}
                                 </label>
                             </div>
                             </>

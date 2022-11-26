@@ -2,14 +2,15 @@ import React, {useEffect, useState} from "react";
 import axios from "axios";
 import {Link, useHistory} from "react-router-dom";
 import CreateQuiz from "./createQuiz";
-import CreateQuestions from "./questions";
 
 const AllQuiz = () => {
 
     const [quiz, setQuiz] = useState([]);
     const [user, setUser] = useState({});
+    const [ currentPage, setCurrentPage ] = useState(0)
+    const [ PageQuiz, setPageQuiz ] = useState('');
 
-    console.log('soy el quiz '+quiz);
+    // console.log('soy el quiz '+quiz);
     
 
     const history = useHistory()
@@ -19,14 +20,14 @@ const AllQuiz = () => {
         axios.get("http://localhost:8000/api/allQuiz", {withCredentials: true})
             .then(res => {
             setQuiz(res.data);
-            console.log("la data", res.data);
-            console.log("quiz", quiz);
+
         })
             .catch(err => {
                 if(err.response.status === 401) {
                     history.push('/login');
                 }
             });
+
     }, [history])
 
     const userInSession =()=>{
@@ -45,6 +46,23 @@ const AllQuiz = () => {
             history.push('/thequiz/'+id);
     }
 
+
+    const filteredQuiz = () => {
+
+        // return quiz.slice( currentPage, currentPage + 5);
+
+        // // setPageQuiz(quiz);
+        // // console.log(PageQuiz);
+    }
+    const nextPage = () =>
+
+            setCurrentPage( currentPage + 5 );
+
+
+    const prevPage = () => {
+        if ( currentPage > 0 )
+            setCurrentPage( currentPage - 5 );
+    }
 
     // useEffect(() => {
     //     axios.get("http://localhost:8000/api/autors", {withCredentials: true})
@@ -88,6 +106,7 @@ const AllQuiz = () => {
 
 
 
+
     return (
         <div>
             <h1>Bienvenido</h1>
@@ -100,77 +119,36 @@ const AllQuiz = () => {
 
                 <div className="col-6">
                     <h1>Tus Examenes</h1>
+                    <button
+                        className="btn btn-primary"
+                        onClick={prevPage}
+                    >
+                        Anteriores
+                    </button>
+                    &nbsp;
+                    <button
+                        className="btn btn-primary"
+                        onClick={nextPage}
+                    >
+                        Siguientes
+                    </button>
                     {
                     quiz.map((element, index) => (<>
-                        <p key ={index} id={"pquiz"+index}> {element.name}</p>
+                        <h5 key ={index} id={"pquiz"+index}> {element.name}</h5>
 
-                        <button className="btn btn-danger" onClick={()=>AgreeQuestion(element._id)} >ver</button>
+                        <button className="btn btn-primary" onClick={()=>AgreeQuestion(element._id)} >ver</button>
                         </>
                     ))
                     }
-{/*                     
-                    <CreateQuestions>  </CreateQuestions> */}
+
                 </div>
             
             
             
             </div>
-      
 
             
-            {/* <Link to="/new" className="btn btn-success">Nuevo Autor</Link>
-            <button className="btn btn-danger float-right" onClick={cerrarSesion}>Cerrar Sesión</button>
-            
-            <table className="table table-hover">
-                <thead>
-                    <tr>
-                        <th>Nombre</th>
-                        <th>Imagen</th>
-                        <th>Frase celebre</th>
-                        <th>Libros</th>
-                        <th>Cuentos</th>
-                        <th>Artículos</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {
-                        autores.map((autor, index) => (
-                            <tr key={index}>
-                                <td>{autor.nombre}</td>
-                                <td>
-                                    <img src={autor.imagen} alt="autor" className="img-fluid"  width="200px"/>
-                                </td>
-                                <td>{autor.cita}</td>
-                                <td>
-                                    {
-                                        autor.libros ? <span className="bi bi-check text-success"></span> : <span className="bi bi-x text-danger"></span>
-                                    }
-                                </td>
-                                <td>
-                                    {
-                                        autor.cuentos ? <span className="bi bi-check text-success"></span> : <span className="bi bi-x text-danger"></span>
-                                    }
-                                </td>
-                                <td>
-                                    {
-                                        autor.articulos ? <span className="bi bi-check text-success"></span> : <span className="bi bi-x text-danger"></span>
-                                    }
-                                </td>
-                                <td>
-                                <Link className="btn btn-warning" to={`/edit/${autor._id}`}>Editar</Link>
-                                <button className="btn btn-danger" onClick={()=>DeleteAutor(autor._id)} >Eliminar</button>
 
-
-                                </td>
-
-                            </tr>
-
-                        ))
-                    }
-                </tbody>
-
-            </table> */}
 
         </div>
 

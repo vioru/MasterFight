@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState ,useEffect } from "react";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 import CreateQuestions from "./questions";
@@ -36,6 +36,13 @@ const CreateQuiz = () => {
 
     const history = useHistory();
 
+    useEffect(() => {
+
+            console.log("recargo");
+
+
+    }, [])
+
     const newQuiz = e => {
         e.preventDefault();
         //guardar las preguntas
@@ -53,8 +60,8 @@ const CreateQuiz = () => {
             scoreToWin,
 
         }, { withCredentials: true })
-            .then(res => history.push('/'))
-            .catch(err => setErrorQuiz(err.response.data.errors)); //setErrorQerrorQuiz(err.response.data.errors)
+            .then(res => history.go(0))
+            .catch(err => setErrorQuiz(err.response.data.errors)); 
     }
 
 

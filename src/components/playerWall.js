@@ -45,27 +45,6 @@ const PlayerWall = () => {
     //         });
     // }, [history])
 
-    // const userInSession =()=>{
-    //     axios.get("http://localhost:8000/api/user", {withCredentials: true})
-    //     .then(res => setAutores(res.data))
-    //     .catch(err => {
-    //         if(err.response.status === 401) {
-    //             history.push('/login');
-    //         }
-    //     });
-
-    // }
-
-
-    // const DeleteAutor = id => {
-    //     axios.delete("http://localhost:8000/api/autors/"+id)
-    //         .then(res =>{
-
-    //             let newList = autores.filter(autors => autors._id !== id);
-    //                 setAutores(newList);
-
-    //         })
-    // }
 
 
     const cerrarSesion = () => {
@@ -82,6 +61,8 @@ const PlayerWall = () => {
                         <button className="btn btn-danger float-right m-3" onClick={cerrarSesion}>Cerrar Sesión</button>
             <h1>Bienvenido Aprendiz</h1>
             <h3>Introduce tu codigo de examen aqui</h3>
+
+
             
 
 

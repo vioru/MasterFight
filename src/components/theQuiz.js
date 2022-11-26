@@ -1,13 +1,19 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 import {Link, useHistory, useParams} from "react-router-dom";
-import CreateQuiz from "./createQuiz";
-import CreateQuestions from "./questions";
+
 
 
 
 const TheQuiz = () => {
     const{id} = useParams();
+    const [question, setQuestion] = useState("");
+    const [options, setOptions] = useState([,,]);
+    const [status, setStatus] = useState([false, false, false]);
+
+
+    const [errorQuestion, setErrorQuestion] = useState({});
+    // console.log(errorQuestion);
 
     const [quiz, setQuiz] = useState([]);
     const [user, setUser] = useState({});
@@ -32,7 +38,7 @@ const TheQuiz = () => {
                     history.push('/login');
                 }
             });
-    }, [history])
+    }, [questions])
 
     const userInSession =()=>{
         axios.get("http://localhost:8000/api/user", {withCredentials: true})
@@ -51,27 +57,25 @@ const TheQuiz = () => {
     }
 
 
-    // useEffect(() => {
-    //     axios.get("http://localhost:8000/api/autors", {withCredentials: true})
-    //         .then(res => setAutores(res.data))
-    //         .catch(err => {
-    //             if(err.response.status === 401) {
-    //                 history.push('/login');
-    //             }
-    //         });
-    // }, [history])
+    const cerrarSesion = () => {
+        axios.get('http://localhost:8000/api/logout', {withCredentials:true})
+            .then(res => history.push('/admi'))
+            .catch(err => console.log(err));
+    }
 
-    // const userInSession =()=>{
-    //     axios.get("http://localhost:8000/api/user", {withCredentials: true})
-    //     .then(res => setAutores(res.data))
-    //     .catch(err => {
-    //         if(err.response.status === 401) {
-    //             history.push('/login');
-    //         }
-    //     });
+    const EditQuestion = (id) => {
+        console.log(id);
+    }
 
-    // }
+    const DeleteQuestion = id => {
+        axios.delete("http://localhost:8000/api/question/delete/"+id)
+        .then(res =>{
 
+            let newList = question.filter(question => question._id !== id);
+                setQuestion(newList);
+
+        })
+    }
 
     // const DeleteAutor = id => {
     //     axios.delete("http://localhost:8000/api/autors/"+id)
@@ -84,31 +88,67 @@ const TheQuiz = () => {
     // }
 
 
-    // const cerrarSesion = () => {
-    //     axios.get('http://localhost:8000/api/logout', {withCredentials:true})
-    //         .then(res => history.push('/login'))
-    //         .catch(err => console.log(err));
-    // }
+    const OptionsChange = ({ target }) => {
+        setOptions({
+            ...options,
+            [target.id]: target.value
+        });
+    }
+    
+    const StatusChange = ({ target }) => {
 
-    const cerrarSesion = () => {
-        axios.get('http://localhost:8000/api/logout', {withCredentials:true})
-            .then(res => history.push('/player'))
-            .catch(err => console.log(err));
+        setStatus([target.id == "status1", target.id == "status2", target.id == "status3"]);
+
     }
 
-    const EditQuestion = (id) => {
-        console.log(id);
+    const newQuestion = e => {
+        e.preventDefault();
+        // console.log(status,'status');
+
+        let data = {
+            question,
+            option1: options.option1,
+            option2: options.option2,
+            option3: options.option3,
+            status1: status[0],
+            status2: status[1],
+            status3: status[2],
+            quiz: id
+        }
+
+
+
+        axios.post('http://localhost:8000/api/question/save', {
+            question,
+            option1: options.option1,
+            option2: options.option2,
+            option3: options.option3,
+            status1: status[0],
+            status2: status[1],
+            status3: status[2],
+            quiz: id
+        }, { withCredentials: true })
+            .then(res => {
+
+                let idQuestion = res.data._id;
+
+                axios.put('http://localhost:8000/api/quiz/update/' + id, {
+                    questions: idQuestion
+                }, { withCredentials: true })
+
+                .then(res => history.go(0))
+            })
+            .catch(err => setErrorQuestion(err.response.data.errors)); //setErrorQuestion(err.response.data.errors)
     }
 
-    const DeleteQuestion = (id) => {
-        console.log(id);
-    }
+
 
 
 
     return (
         <div>
             {/* <h1>Bienvenido</h1> */}
+            <Link to="/admi/wall" className="  btn btn-success float-right col-1 m-3 "> Atras </Link>
             <button className="btn btn-danger float-right m-3" onClick={cerrarSesion}>Cerrar Sesión</button>
             
 
@@ -117,7 +157,7 @@ const TheQuiz = () => {
                         {/* id={"pquiz"+index} */}
                     
 
-                            <h2 >Nombre:{quiz.name} </h2>
+                            <h2>Nombre:{quiz.name} </h2>
                             <h3>Materia :{quiz.type}</h3>
                             <h3>Puntaje minimo :{quiz.scoreToWin}</h3>
 
@@ -139,14 +179,61 @@ const TheQuiz = () => {
                 
                     </div>
                     <div className="col-6">
-                    <CreateQuestions id = {quiz._id} ></CreateQuestions>
+                    <div className="row container mx-5 masterbck">
+            <div className="col-10 my-3 ">
+                <h2 className="">Preguntas</h2>
+                <form onSubmit={newQuestion} className="my-3" >
+                    <div id="question">
+                        <div className="form-group">
+                            <label htmlFor="Question">Haz tu Pregunta</label>
+                            {/* <input type="hidden" value={id} name="id"/> */}
+
+                            <input type="text" name="Question" id="Question" className="form-control" value={question} onChange={e => setQuestion(e.target.value)} />
+                            {errorQuestion.question ? <span className="text-danger">{errorQuestion.question.message}</span> : null}
+                        </div>
+                        <p>Opciones</p>
+                        <div className=" form-group mx-1 row text-center">
+
+
+                            <input type="text" name="option1" id="option1" className="form-control col-11 my-2 " value={options[0]} onChange={OptionsChange} />
+                            {errorQuestion.option1 ? <span className="text-danger">{errorQuestion.option1.message}</span> : null}
+                            <input className="form-control col-1  my-3" id="status1" type="radio" name="status" value={status[0]} onChange={StatusChange} />
+
+
+                            <input type="text" name="option2" id="option2" className="form-control col-11 my-2 " value={options[1]} onChange={OptionsChange} />
+                            {errorQuestion.option2 ? <span className="text-danger">{errorQuestion.option2.message}</span> : null}
+                            <input className="form-control col-1  my-3" id="status2" type="radio" name="status" value={status[1]} onChange={StatusChange} />
+
+                            <input type="text" name="option3" id="option3" className="form-control col-11 my-2 " value={options[2]}  onChange={OptionsChange} />
+                            {errorQuestion.option3 ? <span className="text-danger">{errorQuestion.option3.message}</span> : null}
+                            <input className="form-control col-1  my-3" id="status3" type="radio" name="status" value={status[2]} onChange={StatusChange} />
+
+
+                        </div>
+                        {status === [false, false, false] ? <span className="text-danger">debes escoger la respuesta correcta</span> : null}
+
+                        <div id="morequestions">
+
+                        </div>
+
+                    </div>
+
+
+
+                    <input type="submit" value="Guardar" className="btn btn-primary" />
+                </form>
+            </div>
+
+
+
+        </div>
                     </div>
                 </div>
             
             
             
         
-      
+
 
             
 

@@ -7,8 +7,9 @@ const AllQuiz = () => {
 
     const [quiz, setQuiz] = useState([]);
     const [user, setUser] = useState({});
-    const [ currentPage, setCurrentPage ] = useState(0)
-    const [ PageQuiz, setPageQuiz ] = useState('');
+    const ITEMS_BY_PAGE = 5;
+    const [ itemsFrom, setItemsFrom ] = useState(0);
+    const [ itemsTo, setItemsTo ] = useState(ITEMS_BY_PAGE);
 
     // console.log('soy el quiz '+quiz);
     
@@ -19,20 +20,19 @@ const AllQuiz = () => {
     useEffect(() => {
         axios.get("http://localhost:8000/api/allQuiz", {withCredentials: true})
             .then(res => {
-            setQuiz(res.data);
-
+            setQuiz(res.data);     
         })
             .catch(err => {
                 if(err.response.status === 401) {
                     history.push('/login');
                 }
             });
-
+            userInSession();
     }, [history])
 
     const userInSession =()=>{
         axios.get("http://localhost:8000/api/user", {withCredentials: true})
-        .then(res => setUser(res.data))
+        .then(res => {setUser(res.data);console.log(res.data)})
         .catch(err => {
             if(err.response.status === 401) {
                 history.push('/login');
@@ -47,61 +47,36 @@ const AllQuiz = () => {
     }
 
 
-    const filteredQuiz = () => {
 
-        // return quiz.slice( currentPage, currentPage + 5);
-
-        // // setPageQuiz(quiz);
-        // // console.log(PageQuiz);
+    const nextPage = () =>{
+        if(itemsFrom  + ITEMS_BY_PAGE< quiz.length)
+        {
+            setItemsFrom(itemsFrom + ITEMS_BY_PAGE);
+            setItemsTo(itemsTo +ITEMS_BY_PAGE);
+        }   
+        // logIndexItems();
     }
-    const nextPage = () =>
-
-            setCurrentPage( currentPage + 5 );
-
 
     const prevPage = () => {
-        if ( currentPage > 0 )
-            setCurrentPage( currentPage - 5 );
+        if ( itemsFrom >= ITEMS_BY_PAGE )
+        {
+            setItemsFrom(itemsFrom - ITEMS_BY_PAGE);
+            setItemsTo(itemsTo-ITEMS_BY_PAGE);            
+        }
+        // logIndexItems();
     }
 
-    // useEffect(() => {
-    //     axios.get("http://localhost:8000/api/autors", {withCredentials: true})
-    //         .then(res => setAutores(res.data))
-    //         .catch(err => {
-    //             if(err.response.status === 401) {
-    //                 history.push('/login');
-    //             }
-    //         });
-    // }, [history])
-
-    // const userInSession =()=>{
-    //     axios.get("http://localhost:8000/api/user", {withCredentials: true})
-    //     .then(res => setAutores(res.data))
-    //     .catch(err => {
-    //         if(err.response.status === 401) {
-    //             history.push('/login');
-    //         }
-    //     });
-
+    // const logIndexItems=()=>
+    // {
+    //     console.log("itemsFrom",itemsFrom);
+    //     console.log("ItemsTo",itemsTo);
     // }
 
-
-    // const DeleteAutor = id => {
-    //     axios.delete("http://localhost:8000/api/autors/"+id)
-    //         .then(res =>{
-
-    //             let newList = autores.filter(autors => autors._id !== id);
-    //                 setAutores(newList);
-
-    //         })
-    // }
-
-
-    // const cerrarSesion = () => {
-    //     axios.get('http://localhost:8000/api/logout', {withCredentials:true})
-    //         .then(res => history.push('/login'))
-    //         .catch(err => console.log(err));
-    // }
+    const cerrarSesion = () => {
+        axios.get('http://localhost:8000/api/logout', {withCredentials:true})
+            .then(res => history.push('/admi'))
+            .catch(err => console.log(err));
+    }
 
 
 
@@ -109,8 +84,17 @@ const AllQuiz = () => {
 
     return (
         <div>
-            <h1>Bienvenido</h1>
-            <Link to="/" className="  btn btn-success  my-5 "> Atras </Link>
+            <div className="row">
+            <h1 className="col-10">Bienvenido</h1>
+
+            <button className="btn btn-danger float-right my-2" onClick={cerrarSesion}>Cerrar Sesión</button>
+
+
+
+
+
+            </div>
+            
             
             <div className="row"> 
                 <div className="col-6">
@@ -132,8 +116,9 @@ const AllQuiz = () => {
                     >
                         Siguientes
                     </button>
+                    
                     {
-                    quiz.map((element, index) => (<>
+                    quiz.slice(itemsFrom, itemsTo).map((element, index) => (<>
                         <h5 key ={index} id={"pquiz"+index}> {element.name}</h5>
 
                         <button className="btn btn-primary" onClick={()=>AgreeQuestion(element._id)} >ver</button>

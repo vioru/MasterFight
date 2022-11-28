@@ -2,6 +2,7 @@ import React, {useState} from "react";
 import axios from "axios";
 import {useHistory, Link} from "react-router-dom";
 
+
 import male from './img/male.png'
 import female from './img/female.png'
 import they from './img/they.png'
@@ -30,8 +31,11 @@ const CreatePlayer = () => {
 
 
 
+
+
     const newPlayer = e => {
         e.preventDefault();
+
 
         let data ={
             Name,
@@ -67,7 +71,8 @@ const CreatePlayer = () => {
                 if(res.data.error) {
                     setErrorLogin(res.data.message);
                 } else {
-                    history.push('/player/wall');
+                    console.log(res.data);
+                    history.push('/player/wall/');
                 }
             })
             .catch(err => console.log(err));

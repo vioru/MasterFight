@@ -28,10 +28,6 @@
   color: #61dafb;
 }
 
-body{
-  background-image: url("./components/img/FONDO\ PERGAMINO.jpg");
-  background-size: cover;
-}
 
 
 @keyframes App-logo-spin {
@@ -42,3 +38,102 @@ body{
     transform: rotate(360deg);
   }
 }
+
+body{
+  background-image: url("./components/img/FONDO\ PERGAMINO.jpg");
+  background-size: cover;
+  font-family: monospace; 
+}
+
+
+.ninja{
+  position:absolute;
+  height:220px;
+  width:auto;
+  top: 420px;
+  left : 400px;
+  z-index: 1;
+
+}
+
+
+.evil{
+  position:absolute;
+  height:220px;
+  width:auto;
+  top: 420px;
+  left : 550px;
+  z-index: 1;
+
+}
+
+.back
+{
+  position:absolute;
+  padding-right: 5px;
+  left : 0px;
+  top: 340px;
+  width:1300px;
+  z-index: -1;
+}
+
+.mano{
+  position:absolute;
+  height:340px;
+  width:auto;
+  top: 314px;
+  left :380px;
+
+  z-index: 1;
+
+}
+
+.lanza{
+  position:absolute;
+  height:250px;
+  width:auto;
+  top: 390px;
+  left : 130px;
+  z-index: 1;
+
+}
+
+.maquina{
+  position:absolute;
+  left :-3%;
+  top: 15%;
+  /* top: 420px;
+  left : 400px; */
+  z-index: 1;
+  font-size: 1.5em;
+
+}
+
+.masterintro{
+  position:absolute;
+  height:220px;
+  width:auto;
+  top: 355px;
+  left : 550px;
+  z-index: 1;
+
+}
+
+.aprendiz{
+  position:absolute;
+  height:220px;
+  width:auto;
+  top: 355px;
+  left : 350px;
+  z-index: 1;
+
+}
+
+
+.tachar{
+  text-decoration: line-through;
+}
+
+
+
+

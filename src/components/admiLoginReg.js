@@ -54,7 +54,7 @@ const LoginRegister = () => {
             confirmPassword
         }, { withCredentials: true })
             .then(res => history.push('/admi/wall'))
-            .catch(err => console.log(err)); //setErrorRegistro(err.response.data.errors)
+            .catch(err => setErrorRegistro(err.response.data.errors)); //setErrorRegistro(err.response.data.errors)
     }
 
     const login = e => {

@@ -1,4 +1,24 @@
-.masterbck{
+/* body{
     background-image: url("./components/img/FONDO\ PERGAMINO.jpg");
     background-size: cover;
 }
+
+.ninja{
+    position:absolute;
+    height:200px;
+    width:200px;
+    top: 40px;
+    left : 50px;
+    z-index: 1;
+}
+
+.back
+{
+    position:absolute;
+    width:1300px;
+    z-index: -1;
+} */
+
+.tachar{
+    text-decoration: line-through;
+  }

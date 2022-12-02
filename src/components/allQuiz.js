@@ -11,7 +11,7 @@ const AllQuiz = () => {
     const [ itemsFrom, setItemsFrom ] = useState(0);
     const [ itemsTo, setItemsTo ] = useState(ITEMS_BY_PAGE);
 
-    // console.log('soy el quiz '+quiz);
+    console.log('soy el quiz '+ quiz);
     
 
     const history = useHistory()
@@ -20,30 +20,35 @@ const AllQuiz = () => {
     useEffect(() => {
         axios.get("http://localhost:8000/api/allQuiz", {withCredentials: true})
             .then(res => {
-            setQuiz(res.data);     
+                console.log(res.data);
+                setQuiz(res.data);   
+            
         })
             .catch(err => {
                 if(err.response.status === 401) {
                     history.push('/login');
                 }
             });
-            userInSession();
-    }, [history])
+            
+    }, [])
 
-    const userInSession =()=>{
-        axios.get("http://localhost:8000/api/user", {withCredentials: true})
-        .then(res => {setUser(res.data);console.log(res.data)})
-        .catch(err => {
-            if(err.response.status === 401) {
-                history.push('/login');
-            }
-        });
+    // const userInSession =()=>{
+    //     axios.get("http://localhost:8000/api/user", {withCredentials: true})
+    //     .then(res => {setUser(res.data);
+    //         console.log("la data user",res.data)})
+    //     .catch(err => {
+    //         if(err.response.status === 401) {
+    //             history.push('/login');
+    //         }
+    //     });
 
-    }
+    // }
 
-        const AgreeQuestion = (id) => {
+        const GetExam = (idQuiz) => {
+            console.log(idQuiz);
+            history.push('/thequiz/'+idQuiz);
 
-            history.push('/thequiz/'+id);
+            // history.push('/thequiz/'+idQuiz);
     }
 
 
@@ -89,10 +94,6 @@ const AllQuiz = () => {
 
             <button className="btn btn-danger float-right my-2" onClick={cerrarSesion}>Cerrar Sesión</button>
 
-
-
-
-
             </div>
             
             
@@ -121,7 +122,7 @@ const AllQuiz = () => {
                     quiz.slice(itemsFrom, itemsTo).map((element, index) => (<>
                         <h5 key ={index} id={"pquiz"+index}> {element.name}</h5>
 
-                        <button className="btn btn-primary" onClick={()=>AgreeQuestion(element._id)} >ver</button>
+                        <button className="btn btn-primary" onClick={()=>GetExam(element._id)} >ver</button>
                         </>
                     ))
                     }

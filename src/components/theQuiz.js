@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link, useHistory, useParams } from "react-router-dom";
 import { set } from "mongoose";
+import Editq from "./editquestion";
+import TempleIntro from "./background/temple";
+
 
 
 
@@ -11,19 +14,15 @@ const TheQuiz = () => {
     const [question, setQuestion] = useState("");
     const [options, setOptions] = useState([, ,]);
     const [status, setStatus] = useState([false, false, false]);
+    const [idQ, setidQ] = useState("");
 
-    //editar
-    const [editQuestion, setEditQuestion] = useState("");
-    const [option1, setOption1] = useState("");
-    const [option2, setOption2] = useState("");
-    const [option3, setOption3] = useState("");
-    const [status1, setStatus1] = useState("");
-    const [status2, setStatus2] = useState("");
-    const [status3, setStatus3] = useState("");
+
 
 
     const [errorQuestion, setErrorQuestion] = useState({});
     const [Edit, setEdit] = useState(false);
+
+    console.log(Edit);
     // console.log(errorQuestion);
 
     const [quiz, setQuiz] = useState([]);
@@ -37,41 +36,32 @@ const TheQuiz = () => {
 
 
     useEffect(() => {
-        axios.get("http://localhost:8000/api/Quiz/" + id, { withCredentials: true })
-            .then(res => {
-                setQuiz(res.data);
-                setquestions(res.data.questions);
-                if (setEdit) {
-                    axios.get("http://localhost:8000/api/question/" + id, { withCredentials: true })
-                        .then(res => {
-                            setEditQuestion(res.data.question);
-                            setOption1(res.data.option1);
-                            setOption2(res.data.option2);
-                            setOption3(res.data.option3);
-                            setStatus1(res.data.status1);
-                            setStatus2(res.data.status2);
-                            setStatus3(res.data.status3);
-                        })
+        loadQuizData();
 
-                        .catch(err => history.push('/error'));
-                }
-            })
-            .catch(err => {
-                if (err.response.status === 401) {
-                    history.push('/login');
-                }
-            });
+    }, [])
 
-    }, [quiz])
+    // const userInSession = () => {
+    //     axios.get("http://localhost:8000/api/user", { withCredentials: true })
+    //         .then(res => setUser(res.data))
+    //         .catch(err => {
+    //             if (err.response.status === 401) {
+    //                 history.push('/login');
+    //             }
+    //         });
 
-    const userInSession = () => {
-        axios.get("http://localhost:8000/api/user", { withCredentials: true })
-            .then(res => setUser(res.data))
-            .catch(err => {
-                if (err.response.status === 401) {
-                    history.push('/login');
-                }
-            });
+    // }
+    const loadQuizData=()=>{
+        axios.get("http://localhost:8000/api/Quiz/"+id, { withCredentials: true })
+        .then(res => {
+            setQuiz(res.data);
+            setquestions(res.data.questions);
+
+        })
+        .catch(err => {
+            if (err.response.status === 401) {
+                history.push('/login');
+            }
+        });
 
     }
 
@@ -90,48 +80,13 @@ const TheQuiz = () => {
 
 
 
-    const EditQuestion = (id) => {
+    const EditQuestion = (idQuestion) => {
 
         setEdit(true);
+        setidQ(idQuestion);
 
-        //     axios.get("http://localhost:8000/api/question/"+id, {withCredentials: true})
-        //     .then(res => {
-        //         setEditQuestion(res.data.question);
-        //         setOption1(res.data.option1);
-        //         setOption2(res.data.option2);   
-        //         setOption3(res.data.option3);        
-        //         setStatus1(res.data.status1);
-        //         setStatus2(res.data.status2);
-        //         setStatus3(res.data.status3);
-        // })
-        //     .catch(err => {
-        //         if(err.response.status === 401) {
-        //             history.push('/login');
-        //         }
-        //     });
 
-        //     console.log(id);
     }
-
-
-
-    .then(res => {
-        setNombre(res.data.nombre);
-        setImagen(res.data.imagen);
-        setcita(res.data.cita);
-        setArticulos(res.data.articulos);
-        setCuentos(res.data.cuentos);
-        setLibros(res.data.libros);
-    })
-
-    .catch(err => history.push('/error'));
-
-
-
-
-
-
-
 
 
 
@@ -139,21 +94,15 @@ const TheQuiz = () => {
 const DeleteQuestion = id => {
     axios.delete("http://localhost:8000/api/question/delete/" + id)
         .then(res => {
-            let newList = question.filter(question => question._id !== id);
-            setQuestion(newList);
+            // let newList = question.filter(question => question._id !== id);
+            // setQuestion(newList);
+            console.log(res.data);
+            loadQuizData();
         })
 
 }
 
-// const DeleteAutor = id => {
-//     axios.delete("http://localhost:8000/api/autors/"+id)
-//         .then(res =>{
 
-//             let newList = autores.filter(autors => autors._id !== id);
-//                 setAutores(newList);
-
-//         })
-// }
 
 
 const OptionsChange = ({ target }) => {
@@ -186,6 +135,7 @@ const newQuestion = e => {
 
 
 
+
     axios.post('http://localhost:8000/api/question/save',
         data
         , { withCredentials: true })
@@ -199,10 +149,12 @@ const newQuestion = e => {
 
                 // .then(res => history.go(0))
                 .then(res => {
-                    setStatus([false, false, false]);
-                    setOptions(["", "", ""]);
-                    setQuestion("");
                     history.go(0);
+                    // setStatus([false, false, false]);
+                    // setOptions([, , ]);
+                    // setQuestion("");
+                    // reloadQuizData();
+                    // click();
 
                 })
         })
@@ -216,11 +168,19 @@ const newQuestion = e => {
 
 
 
+
+const reloadQuizData = (questionId) => {
+    loadQuizData();
+    // history.push('/thequiz/'+id+"#"+questionId);
+}
+
+
 return (
     <div>
         {/* <h1>Bienvenido</h1> */}
-        <Link to="/admi/wall" className="  btn btn-success float-right col-1 m-3 "> Atras </Link>
+
         <button className="btn btn-danger float-right m-3" onClick={cerrarSesion}>Cerrar Sesión</button>
+        <Link to="/admi/wall" className="  btn btn-success float-right col-1 m-3 "> Atras </Link>
 
 
         <div className="row">
@@ -233,7 +193,7 @@ return (
                 <h3>Puntaje minimo :{quiz.scoreToWin}</h3>
 
                 {questions.map((element, index) => (<>
-                    <h3 key={index}>Pregunta  : ¿{element.question}?</h3>
+                    <h3 id={element._id} key={index}>Pregunta  : ¿{element.question}?</h3>
                     <h5><b>a.</b>{element.option1}</h5>
                     <h5><b>b.</b>{element.option2}</h5>
                     <h5><b>c.</b>{element.option3}</h5>
@@ -245,6 +205,18 @@ return (
 
             </div>
             <div className="col-6">
+                { Edit? 
+                // <TempleIntro/>
+                <><div className="row container mx-5 masterbck">
+                <div className="col-10 my-3 ">
+                <Editq  id ={idQ} setEdit ={setEdit}  reloadQuizData={reloadQuizData} />
+                    </div>
+                    </div>
+                    </>
+                
+
+
+                    :<>
                 <div className="row container mx-5 masterbck">
                     <div className="col-10 my-3 ">
                         <h2 className="">Preguntas</h2>
@@ -293,7 +265,9 @@ return (
 
 
 
-                </div>
+                </div> 
+                </>
+            }
             </div>
         </div>
 

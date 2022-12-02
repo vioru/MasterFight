@@ -118,6 +118,7 @@ const CreatePlayer = () => {
                             <input type="password" name="confirmPassword" id="confirmPassword" className="form-control" value={confirmPassword} onChange={e=> setConfirmPassword(e.target.value)}  />
                             {errorRegistro.confirmPassword ? <span className="text-danger">{errorRegistro.confirmPassword.message}</span> : null}
                         </div>
+                        {errorRegistro.Avatar ? <span className="text-danger">{errorRegistro.Avatar.message}</span> : null}
                         <div className='col-md-6 d-flex '>
                         {Gender.map(elemento =>(
                             <>
@@ -128,10 +129,13 @@ const CreatePlayer = () => {
                                     className="img-responsive" alt="avatar" width="80px" /> 
 
                                 </label>
+                                
                             </div>
                             </>
                             ))}
+                            
                         </div>
+                        
 
                         <input type="submit" value="Registarme" className="btn btn-primary" />
                     </form>
